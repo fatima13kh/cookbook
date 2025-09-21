@@ -44,7 +44,6 @@ router.post('/', async (req, res) => {
 
 
 // foods show route
-// controllers/foods.js
 
 router.get('/:foodId', async (req, res) => {
   try {
@@ -62,6 +61,8 @@ router.get('/:foodId', async (req, res) => {
     res.redirect('/');
   }
 });
+
+// food delete route
 
 router.delete('/:foodId', async (req, res) => {
   try {
@@ -81,6 +82,45 @@ router.delete('/:foodId', async (req, res) => {
   }
 });
 
+
+// food edit route
+
+router.get('/:foodId/edit', async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.session.user._id);
+    const food = currentUser.pantry.id(req.params.foodId);
+    res.render('foods/edit.ejs', {
+      food: food,
+    });
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
+
+// food update route
+
+router.put('/:foodId', async (req, res) => {
+  try {
+    // Find the user from req.session
+    const currentUser = await User.findById(req.session.user._id);
+    // Find the current food from the id supplied by req.params
+    const food = currentUser.pantry.id(req.params.foodId);
+    // Use the Mongoose .set() method
+    // this method updates the current food to reflect the new form
+    // data on `req.body`
+    food.set(req.body);
+    // Save the current user
+    await currentUser.save();
+    // Redirect back to the show view of the current food
+    res.redirect(
+      `/users/${currentUser._id}/foods/${req.params.foodId}`
+    );
+  } catch (error) {
+    console.log(error);
+    res.redirect('/');
+  }
+});
 
 
 module.exports = router;
