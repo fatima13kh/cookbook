@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
 
 app.use('/auth', authController);
 
-
+app.use(isSignedIn);
 // PROTECTED
 app.use('/users/:userId/foods', foodsController);
 
