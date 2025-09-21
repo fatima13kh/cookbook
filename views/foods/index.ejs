@@ -3,21 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your Foods</title>
+    <title>Your Pantry</title>
   </head>
   <body>
     <%- include('../partials/_navbar.ejs') %>
-    <h1>Your Foods</h1>
+    <h1>Your Pantry</h1>
     <a href="/users/<%=user._id%>/foods/new">Add a Food Item</a>
     <!-- Add the following: -->
      </div>
   <ul>
-    <% foods.forEach((food)=>{ %>
-    <a href="/users/<%= user._id %>/foods/<%= food._id %>">
-      <li><%= food.name %></li>
-    </a>
-    <% }) %>
-  </ul>
+    <% if (foods.length > 0) { %>
+        <% foods.forEach((food) => { %>
+        <li>
+            <a href="/users/<%= user._id %>/foods/<%= food._id %>"><%= food.name %></a>
+        </li>
+        <% }) %>
+    <% } else { %>
+        <li>There are no items in this pantry.</li>
+    <% } %>
+</ul>
 </div>
   </body>
 </html>
